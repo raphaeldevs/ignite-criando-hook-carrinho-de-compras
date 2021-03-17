@@ -55,7 +55,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       if (product) {
         const { id, amount } = product;
 
-        return updateProductAmount({ productId: id, amount });
+        return updateProductAmount({ productId: id, amount: amount + 1 });
       }
 
       const newProduct = { ...productData, amount: 1 };
@@ -68,9 +68,11 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
   const removeProduct = (productId: number) => {
     try {
-      // TODO
+      const filteredCart = cart.filter(product => product.id !== productId);
+
+      setCart(filteredCart);
     } catch {
-      // TODO
+      toast.error('Erro na remoção do produto');
     }
   };
 
@@ -87,8 +89,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
       const productIsAvailableInStock = productStock.amount > amount;
 
-      console.log(productStock.amount, amount)
-
       if (!productIsAvailableInStock) {
         toast.error('Quantidade solicitada fora de estoque');
 
@@ -96,9 +96,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       }
 
       const updatedAmountCartProduct = cart.map(product => {
-        return product.id === productId
-          ? { ...product, amount: amount + 1 }
-          : product;
+        return product.id === productId ? { ...product, amount } : product;
       });
 
       setCart(updatedAmountCartProduct);
