@@ -87,7 +87,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         params: { id: productId }
       });
 
-      const productIsAvailableInStock = productStock.amount > amount;
+      const productIsAvailableInStock = productStock.amount >= amount;
 
       if (!productIsAvailableInStock) {
         toast.error('Quantidade solicitada fora de estoque');
